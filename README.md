@@ -34,7 +34,7 @@ You need to have PHP version 8.0 or above. Node.js version 12.0 or above.
 <ol dir="auto">
     <li>Navigate to <code>frontend</code> folder using terminal</li>
     <li>Run <code>npm install</code> to install vue.js project dependencies</li>
-    <li>Copy <code>vue/.env.example</code> into <code>vue/.env</code> and specify API URL</li>
+    <li>Copy <code>frontend/.env.example</code> into <code>frontend/.env</code> and specify API URL</li>
     <li>Start frontend by running <code>npm run dev</code></li>
     <li>Open <a href="http://localhost:3000" rel="nofollow">http://localhost:3000</a></li>
 </ol>
