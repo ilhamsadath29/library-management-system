@@ -13,7 +13,12 @@ class Categories extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 255);
+            $table->tinyInteger('status')->default(1);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +28,6 @@ class Categories extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('categories');
     }
 }
