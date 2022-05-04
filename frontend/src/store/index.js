@@ -15,6 +15,12 @@ const store = createStore({
                 commit('setUser', data);
                 return data;
             });
+        },
+        login({commit}, user) {
+            return axiosClient.post('/login', user).then(({ data }) => {
+                commit('setUser', data);
+                return data;
+            });
         }
     },
     mutations: {
