@@ -9,13 +9,13 @@
                         </div>
                         <div class="hidden md:block">
                             <div class="ml-10 flex items-baseline space-x-4">
-                                <a
+                                <router-link
                                     v-for="item in navigation"
                                     :key="item.name"
-                                    :href="item.href"
+                                    :to="item.to"
                                     :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']"
                                     :aria-current="item.current ? 'page' : undefined"
-                                >{{ item.name }}</a>
+                                >{{ item.name }}</router-link>
                             </div>
                         </div>
                     </div>
@@ -64,19 +64,19 @@
 
             <DisclosurePanel class="md:hidden">
                 <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                    <DisclosureButton
+                    <router-link
                         v-for="item in navigation"
                         :key="item.name"
                         as="a"
-                        :href="item.href"
+                        :to="item.to"
                         :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium']"
                         :aria-current="item.current ? 'page' : undefined"
-                    >{{ item.name }}</DisclosureButton>
+                    >{{ item.name }}</router-link>
                 </div>
                 <div class="pt-4 pb-3 border-t border-gray-700">
                     <div class="flex items-center px-5">
                         <div class="flex-shrink-0">
-                            <img class="h-10 w-10 rounded-full" :src="user.profile" alt />
+                            <img class="h-10 w-10 rounded-full" :src="user.profile" :alt="user.name" />
                         </div>
                         <div class="ml-3">
                             <div class="text-base font-medium leading-none text-white">{{ user.name }}</div>
@@ -94,7 +94,8 @@
             </DisclosurePanel>
         </Disclosure>
 
-        <route-view></route-view>
+        <router-view></router-view>
+
     </div>
 </template>
 
@@ -109,23 +110,22 @@ import {
     MenuItems,
 } from "@headlessui/vue";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/vue/outline";
-import store from "../store";
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-
-const user = store.state.user.data;
-console.log(user);
+import { computed } from '@vue/runtime-core';
 
 const navigation = [
-    { name: "Dashboard", href: "#", current: true },
-    { name: "Team", href: "#", current: false },
-    { name: "Projects", href: "#", current: false },
-    { name: "Calendar", href: "#", current: false },
-    { name: "Reports", href: "#", current: false },
+    { name: "Dashboard", to: {name: "Dashboard"}, current: true },
+    { name: "Authors", to: {name: "Author"}, current: false },
+    { name: "Categories", to: {name: "Category"}, current: false },
+    { name: "Racks", to: {name: "Rack"}, current: false },
+    { name: "Books", to: {name: "Book"}, current: false },
+    { name: "Issue Book", to: {name: "IssueBook"}, current: false },
 ];
+
 const userNavigation = [
     { name: "Your Profile", href: "#" },
-    { name: "Settings", href: "#" },
+    { name: "Settings", href: "#", userCheck: 1 },
     { name: "Sign out", href: "#" },
 ];
 
@@ -145,6 +145,21 @@ export default {
     setup() {
         const store = useStore();
         const router = useRouter();
+
+        function logout() {
+            store.dispatch("logout").then(() => {
+                router.push({
+                    name: "Login",
+                });
+            });
+        }
+        
+        return {
+            user: computed(() => store.state.user.data),
+            navigation,
+            userNavigation,
+            logout,
+        };
     },
 };
 </script>

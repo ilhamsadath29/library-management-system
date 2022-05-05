@@ -5,9 +5,15 @@ import DefaultLayout from '../components/DefaultLayout.vue';
 
 import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
+import Logout from '../views/Logout.vue';
 
 import Dashboard from '../views/Dashboard.vue';
-
+import Author from '../views/Author.vue';
+import Category from '../views/Category.vue';
+import Rack from '../views/Rack.vue';
+import RackCreateEdit from '../views/RackCreateEdit.vue';
+import Book from '../views/Book.vue';
+import IssueBook from '../views/IssueBook.vue';
 
 import store from "../store"
 
@@ -30,8 +36,20 @@ const routes = [
         meta: { requiresAuth: true },
         children: [
             { path: '/dashboard', name: 'Dashboard', component: Dashboard },
+            { path: '/author', name: 'Author', component: Author },
+            { path: '/category', name: 'Category', component: Category },
+            { path: '/racks', name: 'Rack', component: Rack },
+            { path: '/rack/create', name: 'RackCreate', component: RackCreateEdit },
+            { path: '/book', name: 'Book', component: Book },
+            { path: '/issue-book', name: 'IssueBook', component: IssueBook },
         ]
     },
+    // {
+    //     path: '/logout',
+    //     redirect: '/login',
+    //     component: Logout,
+    //     name: 'Logout'
+    // },
 ];
 
 const router = createRouter({

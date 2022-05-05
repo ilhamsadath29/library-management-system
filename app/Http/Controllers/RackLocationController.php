@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\RackLocation;
 use App\Http\Requests\StoreRackLocationRequest;
 use App\Http\Requests\UpdateRackLocationRequest;
+use App\Http\Resources\RackResource;
+use Illuminate\Http\Request;
 
 class RackLocationController extends Controller
 {
@@ -13,9 +15,10 @@ class RackLocationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $user = $request->user();
+        return RackResource::collection(RackLocation::where('user_id', $user->id)->paginate(6));
     }
 
     /**

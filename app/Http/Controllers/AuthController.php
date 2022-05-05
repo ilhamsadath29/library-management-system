@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
@@ -43,6 +44,8 @@ class AuthController extends Controller
 
         $token = $user->createToken('main')->plainTextToken;
 
+        $user['profile'] = $this->profile ? URL::to($this->profile) : null;
+
         return response([
             'user' => $user,
             'token' => $token
@@ -71,9 +74,22 @@ class AuthController extends Controller
 
         $token = $user->createToken('main')->plainTextToken;
 
+        $user->profile = $user->profile ? URL::to($user->profile) : null;
+
         return response([
             'user' => $user,
             'token' => $token
+        ]);
+    }
+
+    public function logout()
+    {
+        $user = Auth::user();
+
+        $user->currentAccessToken()->delete();
+
+        return response([
+            'success' => true
         ]);
     }
 
