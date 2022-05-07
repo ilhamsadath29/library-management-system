@@ -96,6 +96,7 @@
 
         <router-view></router-view>
 
+        <Notification />
     </div>
 </template>
 
@@ -113,21 +114,7 @@ import { BellIcon, MenuIcon, XIcon } from "@heroicons/vue/outline";
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import { computed } from '@vue/runtime-core';
-
-const navigation = [
-    { name: "Dashboard", to: {name: "Dashboard"}, current: true },
-    { name: "Authors", to: {name: "Author"}, current: false },
-    { name: "Categories", to: {name: "Category"}, current: false },
-    { name: "Racks", to: {name: "Rack"}, current: false },
-    { name: "Books", to: {name: "Book"}, current: false },
-    { name: "Issue Book", to: {name: "IssueBook"}, current: false },
-];
-
-const userNavigation = [
-    { name: "Your Profile", href: "#" },
-    { name: "Settings", href: "#", userCheck: 1 },
-    { name: "Sign out", href: "#" },
-];
+import Notification from "./Notification.vue";
 
 export default {
     components: {
@@ -141,10 +128,27 @@ export default {
         BellIcon,
         MenuIcon,
         XIcon,
+        Notification,
     },
     setup() {
         const store = useStore();
         const router = useRouter();
+        
+        const navigation = [
+            { name: "Dashboard", to: {name: "Dashboard"}, current: true },
+            { name: "Authors", to: {name: "Author"}, current: false },
+            { name: "Categories", to: {name: "Category"}, current: false },
+            { name: "Racks", to: {name: "Rack"}, current: false },
+            { name: "Books", to: {name: "Book"}, current: false },
+            { name: "Issue Book", to: {name: "IssueBook"}, current: false },
+            { name: "Settings", to: {name: "Setting"}, current: false },
+        ];
+
+        const userNavigation = [
+            { name: "Your Profile", href: "#" },
+            { name: "Settings", href: "#", userCheck: 0 },
+            { name: "Sign out", href: "#" },
+        ];
 
         function logout() {
             store.dispatch("logout").then(() => {

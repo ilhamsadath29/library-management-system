@@ -4,10 +4,15 @@ import axiosClient from "../axios.js"
 const store = createStore({
     state: {
         user: {
-            data: {},
+            data: JSON.parse(sessionStorage.getItem('USER_DATA')),
             token: sessionStorage.getItem('TOKEN')
         },
-        loading: false
+        loading: false,
+        notification: {
+            show: false,
+            type: null,
+            message: null
+        },
     },
     getters: {},
     actions: {
@@ -29,14 +34,14 @@ const store = createStore({
                 return response;
             });
         },
-        saveRack({commit}, rack) {
+        saveRack({commit}, data) {
             commit("setLoading", true);
-            return axiosClient.post('/rack', rack).then(
+            return axiosClient.post('/rack', data).then(
                 (res) => {
                     commit("setLoading", false);
                     return res;
                 }
-            );;
+            );
         },
         getRack({commit}, id) {
             commit("setLoading", true);
@@ -52,20 +57,98 @@ const store = createStore({
                     throw err;
                 }
             );
+        },
+        getSettings({commit}, id) {
+            let response;
+
+            commit("setLoading", true);
+            response = axiosClient.get('/setting').then(
+                (res) => {
+                    commit("setLoading", false);
+                    return res.data;
+                }
+            ).catch(
+                (err) => {
+                    commit("setLoading", false);
+                    throw err;
+                }
+            );
+
+            return response;
+        },
+        getSetting({commit}, id) {
+            let response;
+
+            commit("setLoading", true);
+            response = axiosClient.get(`/setting/${id}`).then(
+                (res) => {
+                    commit("setLoading", false);
+                    if (res.status === 200) {
+                        return res.data;
+                    }
+                }
+            ).catch(
+                (err) => {
+                    commit("setLoading", false);
+                    throw err;
+                }
+            );
+
+            return response;
+        },
+        saveSetting({commit}, data) {
+            commit("setLoading", true);
+            let response;
+            if (data.id) {
+                response = axiosClient.put(`/setting/${data.id}`, data).then(
+                    (res) => {
+                        commit("setLoading", false);
+                        return res;
+                    }
+                );
+            } else {
+                response = axiosClient.post('/setting', data).then(
+                    (res) => {
+                        commit("setLoading", false);
+                        return res;
+                    }
+                ).catch(error => {
+                    commit("setLoading", false);
+                    throw error;
+                });
+            }
+
+            return response;
+        },
+        deleteSetting({} , id) {
+            axiosClient.delete(`/setting/${id}`);
         }
     },
     mutations: {
         logout: (state) => {
             state.user.data = {};
             state.user.token = null;
+            sessionStorage.clear();
         },
         setUser: (state, userData) => {
             state.user.token = userData.token;
             state.user.data = userData.user;
+            sessionStorage.setItem('USER_DATA', JSON.stringify(userData.user));
             sessionStorage.setItem('TOKEN', userData.token);
         },
         setLoading: (state, loading) => {
             state.loading = loading;
+        },
+        notify: (state, { message, type }) => {
+            state.notification.show = true;
+            state.notification.type = type;
+            state.notification.message = message;
+
+            setTimeout(() => {
+                state.notification.show = false;
+                state.notification.type = null;
+                state.notification.message = null;
+            }, 3000);
         }
     },
     modules: {}

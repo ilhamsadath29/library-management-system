@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RackLocationController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     
     // Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::resource('/setting', SettingController::class)->middleware('super_admin');
     Route::resource('/rack', RackLocationController::class);
 });
 

@@ -5,7 +5,7 @@ import DefaultLayout from '../components/DefaultLayout.vue';
 
 import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
-import Logout from '../views/Logout.vue';
+// import Logout from '../views/Logout.vue';
 
 import Dashboard from '../views/Dashboard.vue';
 import Author from '../views/Author.vue';
@@ -14,6 +14,9 @@ import Rack from '../views/Rack.vue';
 import RackCreateEdit from '../views/RackCreateEdit.vue';
 import Book from '../views/Book.vue';
 import IssueBook from '../views/IssueBook.vue';
+
+import Setting from '../views/Setting.vue';
+import SettingSave from '../views/SettingSave.vue';
 
 import store from "../store"
 
@@ -42,6 +45,9 @@ const routes = [
             { path: '/rack/create', name: 'RackCreate', component: RackCreateEdit },
             { path: '/book', name: 'Book', component: Book },
             { path: '/issue-book', name: 'IssueBook', component: IssueBook },
+            { path: '/setting', name: 'Setting', component: Setting },
+            { path: '/setting/create', name: 'SettingCreate', component: SettingSave },
+            { path: '/setting/:id', name: 'SettingEdit', component: SettingSave },
         ]
     },
     // {

@@ -13,7 +13,7 @@ class UpdateSettingRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,15 @@ class UpdateSettingRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'lib_name'                      => 'required|string|max:200',
+            'lib_address'                   => 'required|string|max:255',
+            'lib_contact_number'            => 'required|string|max:30',
+            'lib_total_book_issue_day'      => 'required|integer|max:512',
+            'lib_one_day_fine'              => 'required|numeric|between:0,99.99',
+            'lib_issue_total_book_per_user' => 'required|integer|max:64',
+            'lib_currency'                  => 'required|string|max:30',
+            'lib_timezone'                  => 'required|string|max:100',
+            'status'                        => 'integer|digits_between: 0,9',
         ];
     }
 }
