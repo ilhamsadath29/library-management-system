@@ -2,11 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Setting;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class SuperAdminRoleIsValid
+class CheckSiteExist
 {
     /**
      * Handle an incoming request.
@@ -17,14 +17,11 @@ class SuperAdminRoleIsValid
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::check()) 
-            return redirect('login');
-
-        $user = Auth::user();
-
-        if($user->type === 0)
+        $setting = Setting::where('id', $request->site_id)->where('status', '!=', 9)->first();
+        
+        if($setting)
             return $next($request);
         
-        return response(['errors' => ['user-type' => ['Illegal moves']]], 422);
+        return response(['errors' => ['Site' => ['oops, Setting not exists!']]], 422);
     }
 }

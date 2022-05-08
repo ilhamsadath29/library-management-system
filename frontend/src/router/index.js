@@ -18,6 +18,9 @@ import IssueBook from '../views/IssueBook.vue';
 import Setting from '../views/Setting.vue';
 import SettingSave from '../views/SettingSave.vue';
 
+import User from '../views/User.vue';
+import UserSave from '../views/UserSave.vue';
+
 import store from "../store"
 
 const routes = [
@@ -39,15 +42,21 @@ const routes = [
         meta: { requiresAuth: true },
         children: [
             { path: '/dashboard', name: 'Dashboard', component: Dashboard },
+            
+            { path: '/setting', name: 'Setting', component: Setting },
+            { path: '/setting/create', name: 'SettingCreate', component: SettingSave },
+            { path: '/setting/:id', name: 'SettingEdit', component: SettingSave },
+
+            { path: '/:site_id/user', name: 'User', component: User },
+            { path: '/:site_id/user/create', name: 'UserCreate', component: UserSave },
+            { path: '/:site_id/user/:id', name: 'UserEdit', component: UserSave },
+
             { path: '/author', name: 'Author', component: Author },
             { path: '/category', name: 'Category', component: Category },
             { path: '/racks', name: 'Rack', component: Rack },
             { path: '/rack/create', name: 'RackCreate', component: RackCreateEdit },
             { path: '/book', name: 'Book', component: Book },
             { path: '/issue-book', name: 'IssueBook', component: IssueBook },
-            { path: '/setting', name: 'Setting', component: Setting },
-            { path: '/setting/create', name: 'SettingCreate', component: SettingSave },
-            { path: '/setting/:id', name: 'SettingEdit', component: SettingSave },
         ]
     },
     // {

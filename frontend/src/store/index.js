@@ -122,7 +122,75 @@ const store = createStore({
         },
         deleteSetting({} , id) {
             axiosClient.delete(`/setting/${id}`);
+        },
+        // User Section with site ========================================================= 
+        getUsers({commit}, site_id) {
+            let response;
+
+            commit("setLoading", true);
+            response = axiosClient.get(`/${site_id}/site-user`).then(
+                (res) => {
+                    commit("setLoading", false);
+                    return res.data;
+                }
+            ).catch(
+                (err) => {
+                    commit("setLoading", false);
+                    throw err;
+                }
+            );
+
+            return response;
+        },
+        getUser({commit}, [site_id, id]) {
+            let response;
+
+            commit("setLoading", true);
+            response = axiosClient.get(`/${site_id}/site-user/${id}`).then(
+                (res) => {
+                    commit("setLoading", false);
+                    if (res.status === 200) {
+                        return res.data;
+                    }
+                }
+            ).catch(
+                (err) => {
+                    commit("setLoading", false);
+                    throw err;
+                }
+            );
+
+            return response;
+        },
+        saveUser({commit}, [site_id, data]) {
+            commit("setLoading", true);
+            let response;
+            if (data.id) {
+                response = axiosClient.put(`/${site_id}/site-user/${data.id}`, data).then(
+                    (res) => {
+                        commit("setLoading", false);
+                        return res;
+                    }
+                );
+            } else {
+                response = axiosClient.post(`/${site_id}/site-user`, data).then(
+                    (res) => {
+                        commit("setLoading", false);
+                        return res;
+                    }
+                ).catch(error => {
+                    commit("setLoading", false);
+                    throw error;
+                });
+            }
+            
+            return response;
+        },
+        deleteSiteUser({}, [site_id, id]) {
+            axiosClient.delete(`/${site_id}/site-user/${id}`);
         }
+
+        // End User Section with site ========================================================= 
     },
     mutations: {
         logout: (state) => {

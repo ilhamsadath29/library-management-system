@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RackLocationController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\SiteUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::resource('/setting', SettingController::class)->middleware('super_admin');
+    Route::resource('{site_id}/site-user', SiteUserController::class)->middleware('super_admin', 'check_site_exist');
     Route::resource('/rack', RackLocationController::class);
 });
 
