@@ -33,7 +33,12 @@ Route::middleware('auth:sanctum')->group(function () {
     // Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::resource('/setting', SettingController::class)->middleware('super_admin');
     Route::resource('{site_id}/site-user', SiteUserController::class)->middleware('super_admin', 'check_site_exist');
-    Route::resource('/rack', RackLocationController::class);
+
+    Route::resource('/rack', RackLocationController::class, ['only' => ['index', 'show']]);
+
+    Route::group(['middleware' => 'admin'], function() {
+        Route::resource('/rack', RackLocationController::class, ['except' => ['index', 'show']]);
+    });
 });
 
 Route::post('/register', [AuthController::class, 'register']);

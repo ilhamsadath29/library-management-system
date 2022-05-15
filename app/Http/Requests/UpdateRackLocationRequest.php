@@ -13,7 +13,7 @@ class UpdateRackLocationRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class UpdateRackLocationRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'site_id'     => 'required|exists:settings,id',
+            'name'        => 'required|string|max:255|unique:App\Models\RackLocation,name,site_id',
+            'status'      => 'integer|digits_between: 0,9',
         ];
     }
 }

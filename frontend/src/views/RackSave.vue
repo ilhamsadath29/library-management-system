@@ -2,7 +2,7 @@
     <PageComponent>
         <template v-slot:header>
             <div class="flex justify-between items-center">
-                <h1 class="text-3xl font-bold text-gray-900">Rack Create</h1>
+                <h1 class="text-3xl font-bold text-gray-900">Rack - {{ model.id ? `${model.name} Update` : 'Create'}}</h1>
                 <router-link :to="{name: 'Rack'}" class="py-2 px-3 text-white bg-emerald-500 rounded-md hover:bg-emerald-600">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 -mt-1 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
@@ -23,20 +23,17 @@
                             id="name"
                             name="name"
                             type="text"
-                            autocomplete="name"
+                            autocomplete="off"
                             required
                             class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                             placeholder="Rack Name"
                             v-model="model.name"
                         />
                     </div>
-                    
                 </div>
 
                 <div>
-                    <button type="submit" class="w-20 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        Create
-                    </button>
+                    <button type="submit" class="w-20 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Create</button>
                 </div>
             </form>
         </div>
@@ -53,31 +50,45 @@ import store from "../store";
 const router = useRouter();
 const route = useRoute();
 
-const model = ref({
-    name: ''
-});
-
 const loading = computed(() => store.state.loading);
+const user = computed(() => store.state.user.data);
+
+const model = ref({
+    site_id: user.value.site_id,
+    name: "",
+});
 
 // handle edit page
 if (route.params.id) {
-    store.dispatch("getRack", route.params.id);
-}
-
-function saveData() {
-    store.dispatch("saveRack", model.value).then(({ data }) => {
-        store.commit("notify", {
-            type: "Success",
-            message: "Survey was successfully updated.",
-        });
-
-        router.push({
-            name: "Rack"
-        });
+    store.dispatch("getRack", route.params.id).then((data) => {
+        model.value = data.data;
     });
 }
 
+function saveData() {
+    model.value.site_id == user.site_id;
+    if(model.value.site_id == null) {
+        store.commit("notify", {
+            type: "Error",
+            message: "Oops. Something wrong.",
+        });
+    } else {
+        store.dispatch("saveRack", model.value).then((data) => {
+            store.commit("notify", {
+                type: "Success",
+                message: "Rack was successfully updated.",
+            });
+    
+            router.push({
+                name: "Rack",
+            });
+        }).catch((err) => {
+            console.log(err);
+            errors.value = err.response.data.errors;
+        });
+    }
 
+}
 </script>
 
 <style></style>

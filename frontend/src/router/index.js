@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router"
+import store from "../store"
 
 import AuthLayout from '../components/AuthLayout.vue';
 import DefaultLayout from '../components/DefaultLayout.vue';
@@ -8,10 +9,7 @@ import Register from '../views/Register.vue';
 // import Logout from '../views/Logout.vue';
 
 import Dashboard from '../views/Dashboard.vue';
-import Author from '../views/Author.vue';
-import Category from '../views/Category.vue';
-import Rack from '../views/Rack.vue';
-import RackCreateEdit from '../views/RackCreateEdit.vue';
+
 import Book from '../views/Book.vue';
 import IssueBook from '../views/IssueBook.vue';
 
@@ -21,7 +19,15 @@ import SettingSave from '../views/SettingSave.vue';
 import User from '../views/User.vue';
 import UserSave from '../views/UserSave.vue';
 
-import store from "../store"
+import Rack from '../views/Rack.vue';
+import RackSave from '../views/RackSave.vue';
+
+import Author from '../views/Author.vue';
+import AuthorSave from '../views/AuthorSave.vue';
+
+import Category from '../views/Category.vue';
+import CategorySave from '../views/CategorySave.vue';
+
 
 const routes = [
     {
@@ -51,10 +57,18 @@ const routes = [
             { path: '/:site_id/user/create', name: 'UserCreate', component: UserSave },
             { path: '/:site_id/user/:id', name: 'UserEdit', component: UserSave },
 
-            { path: '/author', name: 'Author', component: Author },
-            { path: '/category', name: 'Category', component: Category },
             { path: '/racks', name: 'Rack', component: Rack },
-            { path: '/rack/create', name: 'RackCreate', component: RackCreateEdit },
+            { path: '/rack/create', name: 'RackCreate', component: RackSave },
+            { path: '/rack/:id', name: 'RackEdit', component: RackSave },
+
+            { path: '/author', name: 'Author', component: Author },
+            { path: '/author/create', name: 'AuthorCreate', component: AuthorSave },
+            { path: '/author/:id', name: 'AuthorEdit', component: AuthorSave },
+
+            { path: '/category', name: 'Category', component: Category },
+            { path: '/category/create', name: 'CategoryCreate', component: CategorySave },
+            { path: '/category/:id', name: 'CategoryEdit', component: CategorySave },
+
             { path: '/book', name: 'Book', component: Book },
             { path: '/issue-book', name: 'IssueBook', component: IssueBook },
         ]

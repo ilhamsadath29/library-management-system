@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SiteUser;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -75,6 +76,12 @@ class AuthController extends Controller
         $token = $user->createToken('main')->plainTextToken;
 
         $user->profile = $user->profile ? URL::to($user->profile) : null;
+
+        $user->site_id = null;
+        if ($user->type == 1) {
+            $siteUser = SiteUser::where('user_id', $user->id)->first();
+            $user->site_id = $siteUser->setting_id; 
+        } 
 
         return response([
             'user' => $user,

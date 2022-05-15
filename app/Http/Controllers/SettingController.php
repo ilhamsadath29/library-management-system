@@ -42,12 +42,8 @@ class SettingController extends Controller
      * @param  \App\Models\Setting  $setting
      * @return \Illuminate\Http\Response
      */
-    public function show(Setting $setting, Request $request)
+    public function show(Setting $setting)
     {
-        // $user = $request->user();
-        // if ($user->id !== $survey->user_id) {
-        //     return abort(403, 'Unauthorized actions');
-        // }
         return new SettingResource($setting);
     }
 

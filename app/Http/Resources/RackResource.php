@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use DateTime;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RackResource extends JsonResource
@@ -14,6 +15,13 @@ class RackResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id'           => $this->id,
+            'site_id'      => $this->site_id,
+            'name'         => $this->name,
+            'status'       => $this->status,
+            'created_at'   => (new DateTime($this->created_at))->format('Y-m-d H:i:s'),
+            'updated_at'   => (new DateTime($this->updated_at))->format('Y-m-d H:i:s'),
+        ];
     }
 }

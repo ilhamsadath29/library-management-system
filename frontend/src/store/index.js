@@ -22,43 +22,21 @@ const store = createStore({
                 return data;
             });
         },
-        login({commit}, user) {
+        login({ commit }, user) {
             return axiosClient.post('/login', user).then(({ data }) => {
                 commit('setUser', data);
                 return data;
             });
         },
-        logout({commit}) {
+        logout({ commit }) {
             return axiosClient.post('/logout').then((response) => {
                 commit('logout');
                 return response;
             });
         },
-        saveRack({commit}, data) {
-            commit("setLoading", true);
-            return axiosClient.post('/rack', data).then(
-                (res) => {
-                    commit("setLoading", false);
-                    return res;
-                }
-            );
-        },
-        getRack({commit}, id) {
-            commit("setLoading", true);
-            axiosClient.get(`/rack/${id}`).then(
-                (res) => {
-                    commit("setCurrentSurvey", res.data);
-                    commit("setLoading", false);
-                    return res;
-                }
-            ).catch(
-                (err) => {
-                    commit("setLoading", false);
-                    throw err;
-                }
-            );
-        },
-        getSettings({commit}, id) {
+
+        // Setting Section ================================================================ 
+        getSettings({ commit }) {
             let response;
 
             commit("setLoading", true);
@@ -76,7 +54,7 @@ const store = createStore({
 
             return response;
         },
-        getSetting({commit}, id) {
+        getSetting({ commit }, id) {
             let response;
 
             commit("setLoading", true);
@@ -96,7 +74,7 @@ const store = createStore({
 
             return response;
         },
-        saveSetting({commit}, data) {
+        saveSetting({ commit }, data) {
             commit("setLoading", true);
             let response;
             if (data.id) {
@@ -120,11 +98,13 @@ const store = createStore({
 
             return response;
         },
-        deleteSetting({} , id) {
+        deleteSetting({ }, id) {
             axiosClient.delete(`/setting/${id}`);
         },
+        // End Setting Section ============================================================
+
         // User Section with site ========================================================= 
-        getUsers({commit}, site_id) {
+        getUsers({ commit }, site_id) {
             let response;
 
             commit("setLoading", true);
@@ -142,7 +122,7 @@ const store = createStore({
 
             return response;
         },
-        getUser({commit}, [site_id, id]) {
+        getUser({ commit }, [site_id, id]) {
             let response;
 
             commit("setLoading", true);
@@ -162,7 +142,7 @@ const store = createStore({
 
             return response;
         },
-        saveUser({commit}, [site_id, data]) {
+        saveUser({ commit }, [site_id, data]) {
             commit("setLoading", true);
             let response;
             if (data.id) {
@@ -183,14 +163,83 @@ const store = createStore({
                     throw error;
                 });
             }
-            
+
             return response;
         },
-        deleteSiteUser({}, [site_id, id]) {
+        deleteSiteUser({ }, [site_id, id]) {
             axiosClient.delete(`/${site_id}/site-user/${id}`);
-        }
+        },
+        // End User Section with site =====================================================
 
-        // End User Section with site ========================================================= 
+        // Rack Section ===================================================================
+        getRacks({ commit }) {
+            let response;
+
+            commit("setLoading", true);
+            response = axiosClient.get('/rack').then(
+                (res) => {
+                    commit("setLoading", false);
+                    return res.data;
+                }
+            ).catch(
+                (err) => {
+                    commit("setLoading", false);
+                    throw err;
+                }
+            );
+
+            return response;
+        },
+        saveRack({ commit }, data) {
+            commit("setLoading", true);
+            if (data.id) {
+                response = axiosClient.put(`/rack/${data.id}`, data).then(
+                    (res) => {
+                        commit("setLoading", false);
+                        return res;
+                    }
+                ).catch(error => {
+                    commit("setLoading", false);
+                    throw error;
+                });
+            } else {
+                response = axiosClient.post('/rack', data).then(
+                    (res) => {
+                        commit("setLoading", false);
+                        return res;
+                    }
+                ).catch(error => {
+                    commit("setLoading", false);
+                    throw error;
+                });
+            }
+
+            return response;
+        },
+        getRack({ commit }, id) {
+            let response;
+
+            commit("setLoading", true);
+            response = axiosClient.get(`/rack/${id}`).then(
+                (res) => {
+                    commit("setLoading", false);
+                    if (res.status === 200) {
+                        return res.data;
+                    }
+                }
+            ).catch(
+                (err) => {
+                    commit("setLoading", false);
+                    throw err;
+                }
+            );
+
+            return response;
+        },
+        deleteRack({ }, id) {
+            axiosClient.delete(`/${site_id}/rack/${id}`);
+        },
+        // End Rack Section ===============================================================
     },
     mutations: {
         logout: (state) => {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Book;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,6 +18,7 @@ class CreateIssueBooksTable extends Migration
     {
         Schema::create('issue_books', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Setting::class, 'site_id');
             $table->foreignIdFor(Book::class, 'book_id');
             $table->foreignIdFor(User::class, 'user_id');
             $table->timestamp('issue_date');

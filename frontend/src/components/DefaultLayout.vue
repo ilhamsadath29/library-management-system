@@ -133,6 +133,8 @@ export default {
     setup() {
         const store = useStore();
         const router = useRouter();
+
+        // const user = computed(() => store.state.user.data);
         
         const navigation = [
             { name: "Dashboard", to: {name: "Dashboard"}, current: true },
