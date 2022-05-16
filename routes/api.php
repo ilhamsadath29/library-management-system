@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RackLocationController;
 use App\Http\Controllers\SettingController;
@@ -34,10 +36,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/setting', SettingController::class)->middleware('super_admin');
     Route::resource('{site_id}/site-user', SiteUserController::class)->middleware('super_admin', 'check_site_exist');
 
-    Route::resource('/rack', RackLocationController::class, ['only' => ['index', 'show']]);
+    Route::resource('/rack', RackLocationController::class, ['only' => ['index']]);
+    Route::resource('/author', AuthorController::class, ['only' => ['index']]);
+    Route::resource('/category', CategoryController::class, ['only' => ['index']]);
 
     Route::group(['middleware' => 'admin'], function() {
-        Route::resource('/rack', RackLocationController::class, ['except' => ['index', 'show']]);
+        Route::resource('/rack', RackLocationController::class, ['except' => ['index']]);
+        Route::resource('/author', AuthorController::class, ['except' => ['index']]);
+        Route::resource('/category', CategoryController::class, ['except' => ['index']]);
     });
 });
 

@@ -61,11 +61,11 @@ const routes = [
             { path: '/rack/create', name: 'RackCreate', component: RackSave },
             { path: '/rack/:id', name: 'RackEdit', component: RackSave },
 
-            { path: '/author', name: 'Author', component: Author },
+            { path: '/authors', name: 'Author', component: Author },
             { path: '/author/create', name: 'AuthorCreate', component: AuthorSave },
             { path: '/author/:id', name: 'AuthorEdit', component: AuthorSave },
 
-            { path: '/category', name: 'Category', component: Category },
+            { path: '/categories', name: 'Category', component: Category },
             { path: '/category/create', name: 'CategoryCreate', component: CategorySave },
             { path: '/category/:id', name: 'CategoryEdit', component: CategorySave },
 

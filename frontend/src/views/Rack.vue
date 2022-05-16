@@ -71,7 +71,7 @@ store.dispatch("getRacks").then((data) => {
 
 function deleteItem(data) {
     if (confirm("Are you want to delete this?")) {
-        store.dispatch("deleteSetting", data.id).then(
+        store.dispatch("deleteRack", data.id).then(
             list.value.splice(list.value.map(item => item.id).indexOf(data.id), 1) // remove it from array
         );
     }

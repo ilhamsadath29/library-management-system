@@ -191,6 +191,8 @@ const store = createStore({
             return response;
         },
         saveRack({ commit }, data) {
+            let response;
+
             commit("setLoading", true);
             if (data.id) {
                 response = axiosClient.put(`/rack/${data.id}`, data).then(
@@ -198,9 +200,10 @@ const store = createStore({
                         commit("setLoading", false);
                         return res;
                     }
-                ).catch(error => {
+                ).catch((err) => {
                     commit("setLoading", false);
-                    throw error;
+                    this.dispatch("errDisplay", err);
+                    throw err;
                 });
             } else {
                 response = axiosClient.post('/rack', data).then(
@@ -208,9 +211,10 @@ const store = createStore({
                         commit("setLoading", false);
                         return res;
                     }
-                ).catch(error => {
+                ).catch((err) => {
                     commit("setLoading", false);
-                    throw error;
+                    this.dispatch("errDisplay", err);
+                    throw err;
                 });
             }
 
@@ -237,9 +241,177 @@ const store = createStore({
             return response;
         },
         deleteRack({ }, id) {
-            axiosClient.delete(`/${site_id}/rack/${id}`);
+            axiosClient.delete(`/rack/${id}`);
         },
         // End Rack Section ===============================================================
+
+        // Author Section =================================================================
+        getAuthors({ commit }) {
+            let response;
+
+            commit("setLoading", true);
+            response = axiosClient.get('/author').then(
+                (res) => {
+                    commit("setLoading", false);
+                    return res.data;
+                }
+            ).catch(
+                (err) => {
+                    commit("setLoading", false);
+                    throw err;
+                }
+            );
+
+            return response;
+        },
+        saveAuthor({ commit }, data) {
+            let response;
+
+            commit("setLoading", true);
+            if (data.id) {
+                response = axiosClient.put(`/author/${data.id}`, data).then(
+                    (res) => {
+                        commit("setLoading", false);
+                        return res;
+                    }
+                ).catch((err) => {
+                    commit("setLoading", false);
+                    this.dispatch("errDisplay", err);
+                    throw err;
+                });
+            } else {
+                response = axiosClient.post('/author', data).then(
+                    (res) => {
+                        commit("setLoading", false);
+                        return res;
+                    }
+                ).catch((err) => {
+                    commit("setLoading", false);
+                    this.dispatch("errDisplay", err);
+                    throw err;
+                });
+            }
+
+            return response;
+        },
+        getAuthor({ commit }, id) {
+            let response;
+
+            commit("setLoading", true);
+            response = axiosClient.get(`/author/${id}`).then(
+                (res) => {
+                    commit("setLoading", false);
+                    if (res.status === 200) {
+                        return res.data;
+                    }
+                }
+            ).catch(
+                (err) => {
+                    commit("setLoading", false);
+                    throw err;
+                }
+            );
+
+            return response;
+        },
+        deleteAuthor({ }, id) {
+            axiosClient.delete(`/author/${id}`);
+        },
+        // End Author Section =============================================================
+
+        // Category Section ===============================================================
+        getCategories({ commit }) {
+            let response;
+
+            commit("setLoading", true);
+            response = axiosClient.get('/category').then(
+                (res) => {
+                    commit("setLoading", false);
+                    return res.data;
+                }
+            ).catch(
+                (err) => {
+                    commit("setLoading", false);
+                    throw err;
+                }
+            );
+
+            return response;
+        },
+        saveCategory({ commit }, data) {
+            let response;
+
+            commit("setLoading", true);
+            if (data.id) {
+                response = axiosClient.put(`/category/${data.id}`, data).then(
+                    (res) => {
+                        commit("setLoading", false);
+                        return res;
+                    }
+                ).catch((err) => {
+                    commit("setLoading", false);
+                    this.dispatch("errDisplay", err);
+                    throw err;
+                });
+            } else {
+                response = axiosClient.post('/category', data).then(
+                    (res) => {
+                        commit("setLoading", false);
+                        return res;
+                    }
+                ).catch((err) => {
+                    commit("setLoading", false);
+                    this.dispatch("errDisplay", err);
+                    throw err;
+                });
+            }
+
+            return response;
+        },
+        getCategory({ commit }, id) {
+            let response;
+
+            commit("setLoading", true);
+            response = axiosClient.get(`/category/${id}`).then(
+                (res) => {
+                    commit("setLoading", false);
+                    if (res.status === 200) {
+                        return res.data;
+                    }
+                }
+            ).catch(
+                (err) => {
+                    commit("setLoading", false);
+                    throw err;
+                }
+            );
+
+            return response;
+        },
+        deleteCategory({ }, id) {
+            axiosClient.delete(`/category/${id}`);
+        },
+        // End Category Section ===========================================================
+
+
+        errDisplay({ commit }, err) {
+            if (Object.keys(err.response.data.errors).length) {
+                let list = Object.keys(err.response.data.errors);
+                for (let index = 0; index < list.length; index++) {
+                    for (let indexJ = 0; indexJ < err.response.data.errors[list[index]].length; indexJ++) {
+                        commit("notify", {
+                            type: "Error",
+                            message: `Oops!, ${list[index]} -> ${err.response.data.errors[list[index]][indexJ]}`,
+                        });
+                    }
+                }
+            } else {
+                commit("notify", {
+                    type: "Error",
+                    message: `Oops! ${err.response.data.message}`,
+                });
+            }
+        }
     },
     mutations: {
         logout: (state) => {

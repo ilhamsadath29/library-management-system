@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\RackLocation;
-use App\Http\Requests\StoreRackLocationRequest;
-use App\Http\Requests\UpdateRackLocationRequest;
-use App\Http\Resources\RackResource;
 use App\Models\SiteUser;
 use Illuminate\Http\Request;
+use App\Models\RackLocation;
+use App\Http\Resources\RackResource;
+use App\Http\Requests\StoreRackLocationRequest;
+use App\Http\Requests\UpdateRackLocationRequest;
 
 class RackLocationController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \App\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -27,7 +28,7 @@ class RackLocationController extends Controller
             ], 422);
         }
 
-        return RackResource::collection(RackLocation::where('site_id', $siteUser->setting_id)->paginate(6));
+        return RackResource::collection(RackLocation::where('site_id', $siteUser->setting_id)->where('status', '!=', 9)->paginate(6));
     }
 
     /**
@@ -51,10 +52,9 @@ class RackLocationController extends Controller
      * @param  \App\Models\RackLocation  $rackLocation
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(RackLocation  $rack)
     {
-        $rackLocation = RackLocation::where('id', $id)->first();
-        return new RackResource($rackLocation);
+        return new RackResource($rack);
     }
 
     /**
@@ -64,15 +64,13 @@ class RackLocationController extends Controller
      * @param  \App\Models\RackLocation  $rackLocation
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRackLocationRequest $request, $id)
+    public function update(UpdateRackLocationRequest $request, RackLocation  $rack)
     {
         $data = $request->validated();
-        $rackLocation = RackLocation::where('id', $id)->first();
 
-        // Update survey
-        $rackLocation->update($data);
+        $rack->update($data);
 
-        return new RackResource($rackLocation);
+        return new RackResource($rack);
     }
 
     /**
@@ -81,11 +79,11 @@ class RackLocationController extends Controller
      * @param  \App\Models\RackLocation  $rackLocation
      * @return \Illuminate\Http\Response
      */
-    public function destroy(RackLocation $rackLocation)
+    public function destroy(RackLocation $rack)
     {
-        $rackLocation->status = 9;
-        $rackLocation->name = $this->currentTimestamp().'_'.$rackLocation->name;
-        $rackLocation->update();
+        $rack->status = 9;
+        $rack->name = $this->currentTimestamp().'_'.$rack->name;
+        $rack->update();
 
         return response('', 204);
     }

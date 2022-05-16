@@ -12,8 +12,9 @@
             </div>
         </template>
         <div>
-            <span v-if="loading">loading</span>
+            <span class="container flex justify-center mx-auto" v-if="loading">loading...</span>
             <form v-else class="mt-8 space-y-6" @submit.prevent="saveData">
+
                 <div class="rounded-md shadow-sm -space-y-px">
                     <div class="pb-2">
                         <label for="name pb-2">Rack Name</label>
@@ -50,8 +51,8 @@ import store from "../store";
 const router = useRouter();
 const route = useRoute();
 
-const loading = computed(() => store.state.loading);
 const user = computed(() => store.state.user.data);
+const loading = computed(() => store.state.loading);
 
 const model = ref({
     site_id: user.value.site_id,
@@ -82,9 +83,6 @@ function saveData() {
             router.push({
                 name: "Rack",
             });
-        }).catch((err) => {
-            console.log(err);
-            errors.value = err.response.data.errors;
         });
     }
 

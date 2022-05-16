@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreAuthorRequest extends FormRequest
@@ -13,7 +14,7 @@ class StoreAuthorRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +25,20 @@ class StoreAuthorRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'site_id' => 'required|exists:settings,id',
+            'name'    => [
+                'required', 'string','max:255', 
+                Rule::unique("authors", "name")->where(
+                    function ($query) {
+                        return $query->where(
+                            [
+                                ["site_id", "=", $this->site_id],
+                            ]
+                        );
+                    }
+                )
+            ],
+            'status'  => 'integer|digits_between: 0,9',
         ];
     }
 }

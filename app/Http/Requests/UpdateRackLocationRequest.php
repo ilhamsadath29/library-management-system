@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateRackLocationRequest extends FormRequest
@@ -24,9 +25,20 @@ class UpdateRackLocationRequest extends FormRequest
     public function rules()
     {
         return [
-            'site_id'     => 'required|exists:settings,id',
-            'name'        => 'required|string|max:255|unique:App\Models\RackLocation,name,site_id',
-            'status'      => 'integer|digits_between: 0,9',
+            'site_id' => 'required|exists:settings,id',
+            'name'    => [
+                'required', 'string','max:255', 
+                Rule::unique("rack_locations", "name")->where(
+                    function ($query) {
+                        return $query->where(
+                            [
+                                ["site_id", "=", $this->site_id],
+                            ]
+                        );
+                    }
+                )->ignore($this->id)
+            ],
+            'status' => 'integer|digits_between: 0,9',
         ];
     }
 }

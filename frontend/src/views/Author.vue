@@ -1,75 +1,80 @@
 <template>
-    <PageComponent title="Rack">
-        <div class="lg:flex lg:items-center lg:justify-between">
-            <div class="flex-1 min-w-0">
-                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">Back End Developer</h2>
-                <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
-                    <div class="mt-2 flex items-center text-sm text-gray-500">
-                        <BriefcaseIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />Full-time
-                    </div>
-                    <div class="mt-2 flex items-center text-sm text-gray-500">
-                        <LocationMarkerIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />Remote
-                    </div>
-                    <div class="mt-2 flex items-center text-sm text-gray-500">
-                        <CurrencyDollarIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />$120k &ndash; $140k
-                    </div>
-                    <div class="mt-2 flex items-center text-sm text-gray-500">
-                        <CalendarIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />Closing on January 9, 2020
+    <PageComponent>
+        <template v-slot:header>
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-gray-900">Authors</h1>
+                <router-link :to="{name: 'AuthorCreate'}" class="py-2 px-3 text-white bg-emerald-500 rounded-md hover:bg-emerald-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 -mt-1 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Add new Author
+                </router-link>
+            </div>
+        </template>
+
+        <div class="container flex justify-center mx-auto">
+            <span v-if="loading">loading...</span>
+            <div v-else  class="flex flex-col">
+                <div class="w-full">
+                    <div class="border-b border-gray-200 shadow">
+                        <table class="divide-y divide-gray-300">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-2 text-xs text-gray-500">No</th>
+                                    <th class="px-6 py-2 text-xs text-gray-500">Name</th>
+                                    <th class="px-6 py-2 text-xs text-gray-500">Status</th>
+                                    <th class="px-6 py-2 text-xs text-gray-500" v-if="user.id === 1">Edit / Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-300">
+                                <tr class="whitespace-nowrap" v-for="(item, ind) in list" :key="ind">
+                                    <td class="px-6 py-4 text-sm text-gray-500">{{ ind+1 }}</td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm text-gray-900">{{ item.name }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">{{ item.status === 1 ? 'Active' : 'Inactive' }}</td>
+                                    <td class="px-6 py-4 inline-flex space-x-4" v-if="user.id === 1">
+                                        <router-link  :to="{name: 'AuthorEdit', params: { id: item.id}}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
+                                        </router-link>
+                                    
+                                        <button type="button" @click="deleteItem(item)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </div>
-            <div class="mt-5 flex lg:mt-0 lg:ml-4">
-                <span class="hidden sm:block">
-                    <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <PencilIcon class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />Edit
-                    </button>
-                </span>
-
-                <span class="hidden sm:block ml-3">
-                    <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <LinkIcon class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />View
-                    </button>
-                </span>
-
-                <span class="sm:ml-3">
-                    <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <CheckIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />Publish
-                    </button>
-                </span>
-
-                <!-- Dropdown -->
-                <Menu as="span" class="ml-3 relative sm:hidden">
-                    <MenuButton class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        More
-                        <ChevronDownIcon class="-mr-1 ml-2 h-5 w-5 text-gray-500" aria-hidden="true" />
-                    </MenuButton>
-
-                    <transition
-                        enter-active-class="transition ease-out duration-200"
-                        enter-from-class="transform opacity-0 scale-95"
-                        enter-to-class="transform opacity-100 scale-100"
-                        leave-active-class="transition ease-in duration-75"
-                        leave-from-class="transform opacity-100 scale-100"
-                        leave-to-class="transform opacity-0 scale-95"
-                    >
-                        <MenuItems class="origin-top-right absolute right-0 mt-2 -mr-1 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            <MenuItem v-slot="{ active }">
-                                <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Edit</a>
-                            </MenuItem>
-                            <MenuItem v-slot="{ active }">
-                                <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">View</a>
-                            </MenuItem>
-                        </MenuItems>
-                    </transition>
-                </Menu>
             </div>
         </div>
     </PageComponent>
 </template>
 
 <script setup>
+import { computed, ref } from "@vue/runtime-core";
 import PageComponent from "../components/PageComponent.vue";
+import store from "../store";
 
+const list = ref({});
+const user = computed(() => store.state.user.data);
+const loading = computed(() => store.state.loading);
+
+store.dispatch("getAuthors").then((data) => {
+    list.value = data.data;
+});
+
+function deleteItem(data) {
+    if (confirm("Are you want to delete this?")) {
+        store.dispatch("deleteAuthor", data.id).then(
+            list.value.splice(list.value.map(item => item.id).indexOf(data.id), 1) // remove it from array
+        );
+    }
+}
 </script>
-
 <style></style>
